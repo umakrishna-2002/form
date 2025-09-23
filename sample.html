@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin Portal - Sink Manager</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 20px; }
+      h2 { color: darkblue; }
+      .section { margin-bottom: 20px; padding: 10px; border: 1px solid #ddd; }
+      label { display: inline-block; width: 120px; }
+    </style>
+  </head>
+  <body>
+    <h1>Admin Portal (Sink Manager)</h1>
+
+    <!-- Section to add Artisan Pros -->
+    <div class="section">
+      <h2>Register Artisan Pro</h2>
+      <label>Name:</label><input type="text" id="artisanName" />
+      <button onclick="addArtisan()">Add Artisan</button>
+      <ul id="artisanList"></ul>
+    </div>
+
+    <!-- Section to add Kontikkis -->
+    <div class="section">
+      <h2>Register Kontikki</h2>
+      <label>ID:</label><input type="text" id="kontikkiId" /><br /><br />
+      <label>Surface:</label><input type="text" id="kontikkiSurface" /><br /><br />
+      <label>Depth:</label><input type="number" id="kontikkiDepth" /><br /><br />
+      <button onclick="addKontikki()">Add Kontikki</button>
+      <ul id="kontikkiList"></ul>
+    </div>
+
+    <!-- Section to add Climapreneurs -->
+    <div class="section">
+      <h2>Register Climapreneur</h2>
+      <label>Name:</label><input type="text" id="climapreneurName" />
+      <button onclick="addClimapreneur()">Add Climapreneur</button>
+      <ul id="climapreneurList"></ul>
+    </div>
+
+    <!-- Section to Assign Climapreneur to Kontikki -->
+    <div class="section">
+      <h2>Assign Climapreneur to Kontikki</h2>
+      <label>Select Climapreneur:</label>
+      <select id="assignClimapreneur"></select><br /><br />
+      <label>Select Kontikki:</label>
+      <select id="assignKontikki"></select><br /><br />
+      <button onclick="assignClimapreneur()">Assign</button>
+      <ul id="assignmentList"></ul>
+    </div>
+
+    <script>
+      // Data storage (in memory)
+      let artisans = [];
+      let kontikkis = [];
+      let climapreneurs = [];
+      let assignments = [];
+
+      // Add Artisan Pro
+      function addArtisan() {
+        const name = document.getElementById("artisanName").value;
+        if (name.length < 3) {
+          alert("⚠️ Artisan name must be at least 3 characters.");
+          return;
+        }
+        artisans.push(name);
+        document.getElementById("artisanList").innerHTML = artisans.map(a => `<li>${a}</li>`).join("");
+        document.getElementById("artisanName").value = "";
+      }
+
+      // Add Kontikki
+      function addKontikki() {
+        const id = document.getElementById("kontikkiId").value;
+        const surface = document.getElementById("kontikkiSurface").value;
+        const depth = document.getElementById("kontikkiDepth").value;
+
+        if (!id || !surface || !depth) {
+          alert("⚠️ All Kontikki fields must be filled.");
+          return;
+        }
+
+        kontikkis.push({ id, surface, depth });
+        document.getElementById("kontikkiList").innerHTML = kontikkis.map(k => `<li>${k.id} - Surface: ${k.surface}, Depth: ${k.depth}</li>`).join("");
+        updateDropdowns();
+        document.getElementById("kontikkiId").value = "";
+        document.getElementById("kontikkiSurface").value = "";
+        document.getElementById("kontikkiDepth").value = "";
+      }
+
+      // Add Climapreneur
+      function addClimapreneur() {
+        const name = document.getElementById("climapreneurName").value;
+        if (name.length < 3) {
+          alert("⚠️ Climapreneur name must be at least 3 characters.");
+          return;
+        }
+        climapreneurs.push(name);
+        document.getElementById("climapreneurList").innerHTML = climapreneurs.map(c => `<li>${c}</li>`).join("");
+        updateDropdowns();
+        document.getElementById("climapreneurName").value = "";
+      }
+
+      // Update dropdowns when new Climapreneurs or Kontikkis are added
+      function updateDropdowns() {
+        const climapreneurDropdown = document.getElementById("assignClimapreneur");
+        climapreneurDropdown.innerHTML = climapreneurs.map(c => `<option>${c}</option>`).join("");
+
+        const kontikkiDropdown = document.getElementById("assignKontikki");
+        kontikkiDropdown.innerHTML = kontikkis.map(k => `<option>${k.id}</option>`).join("");
+      }
+
+      // Assign Climapreneur to Kontikki
+      function assignClimapreneur() {
+        const climapreneur = document.getElementById("assignClimapreneur").value;
+        const kontikki = document.getElementById("assignKontikki").value;
+
+        if (!climapreneur || !kontikki) {
+          alert("⚠️ Please select both Climapreneur and Kontikki.");
+          return;
+        }
+
+        assignments.push({ climapreneur, kontikki });
+        document.getElementById("assignmentList").innerHTML = assignments.map(a => `<li>${a.climapreneur} → ${a.kontikki}</li>`).join("");
+      }
+    </script>
+  </body>
+</html>

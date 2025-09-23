@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h2>Farmer Registration</h2>
+
+    <form id="farmerForm">
+      <label>Name:</label>
+      <input type="text" id="name" /><br /><br />
+
+      <label>Age:</label>
+      <input type="number" id="age" /><br /><br />
+
+      <label>Email:</label>
+      <input type="email" id="email" /><br /><br />
+
+      <button type="submit">Register</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+      document.getElementById("farmerForm").onsubmit = function (event) {
+        event.preventDefault(); // stop page reload
+
+        const name = document.getElementById("name").value;
+        const age = document.getElementById("age").value;
+        const email = document.getElementById("email").value;
+        const msg = document.getElementById("message");
+
+        // Validation rules
+        if (name.length < 3) {
+          msg.innerText = "⚠️ Name must be at least 3 characters.";
+        } else if (age < 18) {
+          msg.innerText = "⚠️ Age must be 18 or above.";
+        } else if (!email.includes("@")) {
+          msg.innerText = "⚠️ Enter a valid email address.";
+        } else {
+          msg.innerText = "✅ Farmer registered successfully!";
+        }
+      };
+    </script>
+  </body>
+</html>
